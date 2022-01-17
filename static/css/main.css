@@ -1,0 +1,13 @@
+
+ body {
+     background-color: lightgrey;
+ }
+
+ .menu-item {
+     margin: 5px;
+     color: white;
+     text-decoration: none;
+     background-color: slategrey;
+     padding: 5px;
+     border-radius: 10px;
+}
