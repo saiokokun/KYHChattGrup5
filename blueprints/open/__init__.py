@@ -41,6 +41,14 @@ def login_post():
 def signup_get():
     return render_template('signup.html')
 
+@bp_open.post("/chat")
+def chat_send():
+    message = request.form["Enter your message"]
+
+@bp_open.get("/chat")
+def chat_get():
+    from MQTT.MQTT_Chatt import on_message
+    flash(on_message)
 
 @bp_open.post('/signup')
 def signup_post():
