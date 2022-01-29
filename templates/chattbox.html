@@ -14,11 +14,13 @@
     </div>
 
     <div class="write_chatbox">
-        <form action="{{url_for('bp_user.chat_post')}}" method="POST">
-            <input type="hidden" name="user_id" value="{{ receiver.id }}">
-                <input name="usermsg" placeholder="Enter message here" type="text" id="usermsg" />
-                <input name="submitmsg" type="submit" id=submitting value="Send" />
-            <script type = "text/javascript">
+        <form action="{{ url_for('bp_user.chat_post') }}" method="POST">
+
+        <input type="text" name="body" placeholder="Message Title" />
+        <br />
+        <input class="send-button" type="submit" value="Send" />
+         </form>
+        <script type = "text/javascript">
         </script>
     </div>
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import logout_user, login_required, current_user
 
-from controllers.message_controller import create_message, get_user_messages
+from controllers.message_controller import create_message, get_user_messages, chatboxCTR
 from controllers.user_controller import get_all_but_current_user, get_user_by_id
 
 bp_user = Blueprint('bp_user', __name__)
@@ -53,13 +53,15 @@ from MQTT import MQTT_Chatt
 
 @bp_user.post("/chat")
 def chat_post():
-    body = request.form["usermsg"]
-    receiver_id = "pass"
-    create_message(body, receiver_id)
-
-    return redirect(url_for("bp_user.chat_get"))
+    MQTT_Chatt.main()
+    variabel_namn = request.form['body']
+    chatboxCTR(variabel_namn)
+    return redirect(url_for('bp_user.user_get'))
 
 @bp_user.get("/chat")
 def chat_get():
+
     messages = get_user_messages()
+    from MQTT import MQTT_Chatt
+    MQTT_Chatt.main()
     return render_template("chattbox.html", messages=messages)
