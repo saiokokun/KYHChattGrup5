@@ -33,22 +33,19 @@ def login_post():
 
     # User is verified. Login in user!
     login_user(user)
+    user.online = True;
 
+    from app import db
+    db.session.commit()
     return redirect(url_for('bp_user.user_get'))
-
 
 @bp_open.get('/signup')
 def signup_get():
     return render_template('signup.html')
 
-@bp_open.post("/chat")
-def chat_send():
-    message = request.form["Enter your message"]
 
-@bp_open.get("/chat")
-def chat_get():
-    from MQTT.MQTT_Chatt import on_message
-    flash(on_message)
+
+
 
 @bp_open.post('/signup')
 def signup_post():

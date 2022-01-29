@@ -1,1 +1,4 @@
-fla
+venv/
+.idea/
+__pycache__/
+.env

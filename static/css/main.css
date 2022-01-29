@@ -1,5 +1,5 @@
 body {
-        background-color: chocolate;
+    background-color: chocolate;
     }
 
     .menu-item {
@@ -10,3 +10,43 @@ body {
         padding: 5px;
         border-radius:  5px;
     }
+
+table {
+    width: 75%;
+    background: antiquewhite;
+
+}
+
+th {
+    background: aquamarine;
+}
+
+tr:nth-child(odd){
+    background: darkgray;
+}
+tr:nth-child(even){
+    background: gray;
+    color: white;
+}
+
+.center-content{
+    display:flex;
+    allign-items: center;
+    alligh-content: center;
+}
+
+.circle{
+    margin: 0 auto;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+}
+
+.online{
+    background: lawngreen;
+}
+
+.offline{
+    background:crimson;
+}
+

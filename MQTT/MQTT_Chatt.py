@@ -1,9 +1,9 @@
 import paho.mqtt.client as paho
 import random
 
-from flask_login import login_user, current_user
 
-from blueprints import user
+from blueprints import user_get
+
 from blueprints.open import login_post
 
 CLIENT_ID = f"kyh-mqtt-{random.randint(0, 1000)}"
@@ -11,7 +11,7 @@ USERNAME = "grupp5chatt"
 PASSWORD = "chatt"
 BROKER = "r62b1b61-internet-facing-50dbcaf82667383e.elb.eu-central-1.amazonaws.com"
 PORT = 1883
-USER = current_user.name
+USER = user_get
 CRED = "\033[91m"
 OKBLUE = '\033[94m'
 
@@ -71,8 +71,8 @@ def main():
     while True:
         # Get current temperature
 
-        from blueprints.open import chat_send
-        message = f"{USER}: {chat_send}"
+        from blueprints.user import chat_post
+        message = f"{USER}: {chat_post}"
         # Publish to the topic temperature/room1 with temp
 
         # Publish to the topic temperature/room1 with temp
