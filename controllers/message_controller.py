@@ -19,14 +19,18 @@ def create_message(title, body, receiver_id):
         MQTT_Chatt.MESSAGE = body
 
 
-
-
-
 def get_user_messages():
     return current_user.recv_messages
 
 
-def chatboxCTR(body):
-    from MQTT import MQTT_Chatt
-    MQTT_Chatt.MESSAGE=body
-    return None
+def chatboxCTR():
+    from MQTT import MQTT_Publisher
+    from blueprints.user import chat_post
+    body = chat_post(chatboxCTR())
+    return body
+
+
+def get_MQTT_messages():
+    with open("MQTT/chatlog.txt") as f:
+        lines = f.readlines()
+        return lines

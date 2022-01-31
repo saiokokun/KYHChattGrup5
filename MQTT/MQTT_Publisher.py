@@ -1,5 +1,8 @@
 import paho.mqtt.client as paho
 import random
+import time
+
+
 
 CLIENT_ID = f'kyh-mqtt-{random.randint(0, 1000)}'
 USERNAME = 'test1'
@@ -9,7 +12,7 @@ PORT = 15372
 USER = CLIENT_ID
 CRED = "\033[91m"
 OKBLUE = '\033[94m'
-sub_topic = "temp"
+sub_topic = "kyh/joakim"
 
 
 def on_connect(client, userdata, flags, rc):
@@ -36,31 +39,39 @@ def connect_mqtt():
     return client
 
 
-def on_subscribe(client, userdata, mid, granted_qos):
-    print('Subscribed')
-    print('mid:', mid)
-    print('qos:', granted_qos)
 
-
-def on_message(client, userdata, msg):
-    payload = msg.payload.decode()
-    print(f'Current temp in {msg.topic}: {payload}')
-
-
-def subscribe(client):
-    # Subscribe on topic temperature/room1
-    client.subscribe('temp')
-    client.on_message = on_message
-
+    # Publish to the topic temperature/room1 with temp
 
 def main():
+
     client = connect_mqtt()
-    # When we have subscribed to a topic, call this function
-    client.on_subscribe = on_subscribe
+    # Start the paho loop that will
+    # spawn a new thread and send and receive messages
+    client.loop_start()
 
-    subscribe(client)
-    client.loop_forever()
 
+    sub_topic = "temp"
+    while True:
+        # Get current temperature
+        from controllers import message_controller as MC
+        from blueprints.user import chat_post
+        content = chatboxCRT
+        content = chat_post
+        if content != None :
+
+            client.publish(f'temperature/{sub_topic}', str(content))
+            # Interval to publish messages
+            time.sleep(1)
+        else:
+            time.sleep(5)
+            return
+
+
+
+    #client.loop_stop()
+def messages():
+
+            messages()
 
 if __name__ == '__main__':
     main()

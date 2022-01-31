@@ -3,6 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
+
+
 db = SQLAlchemy()
 
 
@@ -44,6 +46,10 @@ def create_app():
 
     from blueprints.api import bp_api
     app.register_blueprint(bp_api, url_prefix="/api/v1.0")
+
+    from blueprints.admin import bp_admin
+    app.register_blueprint(bp_admin)
+
 
     return app
 

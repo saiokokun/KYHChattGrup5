@@ -4,16 +4,39 @@
     Chat
 {% endblock %}
 {% block content %}
+
+
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbox.css') }}" />
     <h1>Welcome to the chat</h1>
 
-    <div id="chatbox"></div>
+  <head>
         <meta charset="utf-8" />
-        <title>Chat Application</title>
-        <meta name="description" content="Chat Application" />
-    </div>
 
-    <div class="write_chatbox">
+        <title>Chat </title>
+        <meta name="description" content="Chat " />
+
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="menu">
+                <p class="welcome">Welcome to the public chat.
+                    This is not encrypted and not protected.
+                    Do NOT post sensitive information here </p>
+            </div>
+            <div id="messages">
+                <p class="content">{{content}}</p>
+            </div>
+        </div>
+
+
+</body>
+<script type="text/javascript">
+
+
+
+    </script>
+      <div class="write_chatbox"></div>
         <form action="{{ url_for('bp_user.chat_post') }}" method="POST">
 
         <input type="text" name="body" placeholder="Message Title" />
@@ -22,6 +45,8 @@
          </form>
         <script type = "text/javascript">
         </script>
-    </div>
+        </script>
+    </body>
+
 
 {% endblock %}
