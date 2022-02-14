@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import logout_user, login_required, current_user
 
+from app import db
 from controllers.message_controller import create_message, get_user_messages, chatboxCTR, get_MQTT_messages
 from controllers.user_controller import get_all_but_current_user, get_user_by_id
 
@@ -18,6 +19,11 @@ def user_get():
 def logout_get():
     user = current_user
     user.online = False
+    if user.online:
+        pass
+        # check messages.
+        # if message != 0
+        # load messages
 
     from app import db
     db.session.commit()
@@ -29,17 +35,22 @@ def logout_get():
 def message_get(user_id):
     user_id = int(user_id)
     receiver = get_user_by_id(user_id)
-    return render_template('message.html', receiver=receiver)
+    return render_template('message.html', receiver=receiver, user_id=user_id)
 
 
-@bp_user.post("/message")
-def message_post():
-    title = request.form["title"]
-    body = request.form["body"]
-    receiver = request.form["user_id"]
-    create_message(title, body, receiver)
+@bp_user.post('/message/<user_id>')
+def message_post(user_id):
+    from app import db
+    jsondata = request.json
 
-    return redirect(url_for("bp_user.user_get"), receiver=receiver)
+    # create_message(user_id, encrypted_AES_key)
+
+    return redirect(url_for('bp_user.messages_get_sent'))
+
+
+@bp_user.get('/messages/sent')
+def messages_get_sent():
+    return render_template('message_sent.html')
 
 
 @bp_user.get("/mailbox")
@@ -53,7 +64,7 @@ from MQTT import MQTT_Chatt
 
 @bp_user.post("/chat")
 def chat_post():
-    #MQTT_Chatt.main()
+    # MQTT_Chatt.main()
     variabel_namn = request.form['body']
     lines = [variabel_namn]
     with open('MQTT/chatlog.txt', 'a') as f:
@@ -61,6 +72,7 @@ def chat_post():
             f.write(line)
             f.write('\n')
     return redirect(url_for('bp_user.chat_get'))
+
 
 @bp_user.get("/chat")
 def chat_get():

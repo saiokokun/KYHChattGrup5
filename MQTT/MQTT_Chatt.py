@@ -2,10 +2,10 @@ import paho.mqtt.client as paho
 import random
 
 CLIENT_ID = f'kyh-mqtt-{random.randint(0, 1000)}'
-USERNAME = 'test1'
-PASSWORD ="test1"
-BROKER = 'o6a92cf9.eu-central-1.emqx.cloud'
-PORT = 15372
+USERNAME = ''
+PASSWORD = ''
+BROKER = ''
+PORT =
 USER = CLIENT_ID
 CRED = "\033[91m"
 OKBLUE = '\033[94m'

@@ -1,3 +1,6 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
+
 body {
     background-color: chocolate;
     }
@@ -50,3 +53,22 @@ tr:nth-child(even){
     background:crimson;
 }
 
+.sup{
+    position: relative;
+    bottom: 1ex;
+    font-size: 80%;
+    text-decoration: none;
+    color: black;
+}
+
+.new-msg {
+    color: green;
+}
+
+.no-new-msg{
+    color: rgba(54, 54, 54, 0.7);
+}
+
+#message-symbol{
+    font-size: 1em
+}

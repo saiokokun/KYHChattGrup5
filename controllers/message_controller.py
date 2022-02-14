@@ -7,16 +7,24 @@ from models import Message
 user = current_user
 
 
+# userID = db.sqlite.user_ID
+
+def save_offline():
+    pass
+#pling client or sumth
+
+
 def create_message(title, body, receiver_id):
     message = Message(title=title, body=body, sender_id=user.id)
     receiver_id = int(receiver_id)
     receiver = get_user_by_id(receiver_id)
     message.receivers.append(receiver)
+
+    if receiver.online == False:
+        save_offline()
+
     db.session.add(message)
     db.session.commit()
-    if receiver.online == False:
-        from MQTT import MQTT_Chatt
-        MQTT_Chatt.MESSAGE = body
 
 
 def get_user_messages():
@@ -34,3 +42,14 @@ def get_MQTT_messages():
     with open("MQTT/chatlog.txt") as f:
         lines = f.readlines()
         return lines
+
+
+def get_unread_msg_count():
+    user = current_user
+    msg_count = 0
+
+    for msg in user.recv_messages:
+        if not msg.read:
+            msg_count += 1
+
+    return msg_count
