@@ -1,9 +1,11 @@
+import self as self
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import logout_user, login_required, current_user
 
 from app import db
 from controllers.message_controller import create_message, get_user_messages, chatboxCTR, get_MQTT_messages
 from controllers.user_controller import get_all_but_current_user, get_user_by_id
+import json
 
 bp_user = Blueprint('bp_user', __name__)
 
@@ -38,12 +40,20 @@ def message_get(user_id):
     return render_template('message.html', receiver=receiver, user_id=user_id)
 
 
-@bp_user.post('/message/<user_id>')
-def message_post(user_id):
+@bp_user.post('/message/')
+def message_post():
     from app import db
-    jsondata = request.json
+    from models import Message
 
-    # create_message(user_id, encrypted_AES_key)
+    # jsonencrypted = request.json
+    test = request.json
+    decryjson = json.dumps(test)
+    print(decryjson)
+    message = Message(sender_id=current_user.id, encrypted=test['body'], title=test['title'])
+
+    # print(message)
+    db.session.add(message)
+    db.session.commit()
 
     return redirect(url_for('bp_user.messages_get_sent'))
 

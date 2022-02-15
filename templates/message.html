@@ -16,13 +16,8 @@
         <button onclick="generateKey()">Generate AES Key</button>
         <input id="key" placeholder="AES key (enter text or generate)" />
 
-        <br/>
 
-
-        <br/>
-        <br/>
-
-
+     <input type="hidden" id="receiver_id" value="{{ receiver.id }}">
 
         <p>Upload public key</p>
         <input type="file" id="pub-file" enctype="multipart/form-data" />
@@ -31,14 +26,14 @@
         <button onclick="rsaEncrypt()">Encrypt AES-key</button>
         <br/>
         <br/>
-        <form action="{{ url_for('bp_user.message_post', user_id=user_id) }}" method="POST" class="box">
+
 
 
 
             <div class="field">
                 <label class="label">Title</label>
                 <div class="control">
-                    <input name="title" class="input" type="text" placeholder="Message Title">
+                    <input id="title" name="Title" class="input" type="text" placeholder="Message Title">
                 </div>
             </div>
 
@@ -47,7 +42,7 @@
                 <div class="control">
 
                     <input id="messagejson" name="content" class="input textarea" type="text" placeholder="Message to Encrypt">
-                    <button onclick="encrypt()">Encrypt</button>
+                    <button onclick='encrypt()'>Encrypt</button>
                 </div>
             </div>
 
@@ -57,10 +52,10 @@
                 <input id="encrypted_AES" name="encrypted_AES_key" class="input text" type="text" placeholder="">
                 </div>
             </div>
-
-
-            <button type="submit" class="button is-primary">Send</button>
-        </form>
+        <button onclick='fetcher()'>Send</button>
+{#        <form action="{{ url_for('bp_user.message_post', user_id=user_id, receiver_id=receiver_id, title=title) }}" method="POST" class="box">#}
+{#            #}
+{#        </form>#}
 
 
     </div>
@@ -85,7 +80,8 @@
             encrypted = CryptoJS.AES.encrypt(message, key);
             document.getElementById("messagejson").value = encrypted;
             console.log(encrypted)
-            fetcher()
+
+
         }
 
         function readPublicKey() {
@@ -123,12 +119,23 @@
         }
 
             function fetcher() {
-                fetch('http://127.0.0.1:5000/message', {
+                return fetch('http://127.0.0.1:5000/message/', {
                     method: 'POST',
-                    body: JSON.stringify(encrypted.toString()),
+                    body: JSON.stringify(
+                        {"body": encrypted.toString(),
+                        "title": document.getElementById("title").value,
+                        "receiver_id": document.getElementById("receiver_id").value
+                    }),
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8'
                     }
+
+                }).then(function(response) {
+                        if (response.ok) {
+                            location.href='{{ url_for('bp_user.messages_get_sent') }}';
+                            return "OK";
+                        }
+
                 });
             }
 
