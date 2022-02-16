@@ -2,8 +2,7 @@ import self as self
 from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import logout_user, login_required, current_user
 
-from app import db
-from controllers.message_controller import create_message, get_user_messages, chatboxCTR, get_MQTT_messages
+from controllers.message_controller import get_user_messages, get_MQTT_messages
 from controllers.user_controller import get_all_but_current_user, get_user_by_id
 import json
 
@@ -40,6 +39,7 @@ def message_get(user_id):
     return render_template('message.html', receiver=receiver, user_id=user_id)
 
 
+
 @bp_user.post('/message/')
 def message_post():
     from app import db
@@ -47,15 +47,47 @@ def message_post():
 
     # jsonencrypted = request.json
     test = request.json
-    decryjson = json.dumps(test)
-    print(decryjson)
-    message = Message(sender_id=current_user.id, encrypted=test['body'], title=test['title'])
+    rec_id = test["receiver_id"]
+    #print(rec_id)
+    message = Message(sender_id=current_user.id,
+                      encrypted=test['body'],
+                      title=test['title'],
+                      receiver_id=test["receiver_id"])
 
     # print(message)
     db.session.add(message)
     db.session.commit()
 
+    user_message(rec_id)
+
+    # senderinf = message_recv(user_id=test["receiver_id"], message)
+    # koda i databaser är reeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
     return redirect(url_for('bp_user.messages_get_sent'))
+
+
+def user_message(rec_id):
+    from app import db
+    from models import message_recv
+    from models import Message
+    obj = db.session.query(Message).order_by(Message.id.desc()).first()
+    print(obj)
+    print(obj)
+    # msg = message_recv.insert().values([  # try this
+    #     {"user_id": int(rec_id)},
+    #     {"message_id": int(obj.id)}
+    # ])
+    # test1 = message_recv.insert().values(user_id=f"{int(rec_id)}")
+    # test2 = message_recv.insert().values(message_id=f"{int(obj.id)}")
+    # msg_recv = (
+    #     sqlalchemy.sql.expression.insert(message_recv).
+    #     values(user_id=receiver_id, message_id=obj.id)
+    # )
+    # print(msg_recv)
+    # print(msg_recv)
+    db.session.add(message_recv.insert().values(user_id=f"{int(rec_id)}"))
+    db.session.add(message_recv.insert().values(message_id=f"{int(obj.id)}"))
+    db.session.commit()
 
 
 @bp_user.get('/messages/sent')
@@ -67,9 +99,6 @@ def messages_get_sent():
 def mailbox_get():
     messages = get_user_messages()
     return render_template("mailbox.html", messages=messages)
-
-
-from MQTT import MQTT_Chatt
 
 
 @bp_user.post("/chat")

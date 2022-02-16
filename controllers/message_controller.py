@@ -14,28 +14,24 @@ def save_offline():
 #pling client or sumth
 
 
-def create_message(title, body, receiver_id):
-    message = Message(title=title, body=body, sender_id=user.id)
-    receiver_id = int(receiver_id)
-    receiver = get_user_by_id(receiver_id)
-    message.receivers.append(receiver)
-
-    if receiver.online == False:
-        save_offline()
-
-    db.session.add(message)
-    db.session.commit()
+# def create_message(title, bbody, receiver_id):
+#     message = Message(title=title, bbody=bbody, sender_id=user.id)
+#     receiver_id = int(receiver_id)
+#     receiver = get_user_by_id(receiver_id)
+#     message.receivers.append(receiver)
+#
+#     if receiver.online == False:
+#         save_offline()
+#
+#     db.session.add(message)
+#     db.session.commit()
 
 
 def get_user_messages():
     return current_user.recv_messages
 
 
-def chatboxCTR():
-    from MQTT import MQTT_Publisher
-    from blueprints.user import chat_post
-    body = chat_post(chatboxCTR())
-    return body
+
 
 
 def get_MQTT_messages():
