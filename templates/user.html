@@ -1,30 +1,50 @@
 {% extends "base-template.html" %}
 
 {% block title %}
-    User Page :)
+    User Page
 {% endblock %}
-
 
 {% block content %}
     <h1 id="main-heading">User Page</h1>
-    <p>Hello {{ name }}</p>
-    <p>Your friends are:</p>
-    <ul>
-        {% for friend in friends %}
-            <li>{{ friend }}</li>
+    <p>Hello {{ current_user.name }}</p>
+
+    <table>
+        <tr>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th>Online</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td><a href="{{url_for('bp_user.message_get', user_id=user.id) }}">{{ user.name}}</a></td>
+            <td>{{user.email}}</td>
+            <td class="center-content">
+            {% if user.online %}
+                <div class="circle online"></div>
+                {% else %}
+                <div class="circle offline"></div>
+                {% endif %}
+            </td>
+       </tr>
         {% endfor %}
-    </ul>
+    </table>
 
-    <form action="/user" method="POST">
-        <input type="text" name="friend_name" placeholder="New Friend Name" />
-        <br/>
-        <input type="submit" value="Update">
+<p>Use this <a href="https://www.devglan.com/online-tools/rsa-encryption-decryption"> website</a> to generate a rsa key pair in 1024 bits </p>
+    <p>Remember to save your keys, because you'll need them later. If you somehow lost them you can generate a new pair and input the new public key</p>
+
+
+    <form action="{{ url_for('bp_user.public_key_post') }}" method="POST">
+        <label>
+            <input type="text" name="publicKey">
+        </label>
+        <input type="submit">
     </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification">
+                   <a> {{ messages[0] }}.</a>
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <button onclick="changeText()">Change Main Text</button>
-
-{% endblock %}
-
-{% block scripts %}
-    <script src="{{ url_for('static', filename='js/source.js') }}"></script>
 {% endblock %}

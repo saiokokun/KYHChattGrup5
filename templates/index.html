@@ -1,15 +1,13 @@
 {% extends "base-template.html" %}
-
 {% block title %}
-    Main Page :)
+    Main Page
 {% endblock %}
-
-
 {% block content %}
-    <h1>Main Page</h1>
+    <h1>This is the main page</h1>
     <p>This is a paragraph</p>
-    <p>Secundus paragraph</p>
+    <p>This is a second one...</p>
     <a href="https://dn.se">DN</a>
+
     <br />
-    <img src="{{ url_for('static', filename='img/wallpaper.jpg') }}" alt="show avatar"/>
+    <img src="{{ url_for('static', filename='img/cat_in_hat2.jpg') }}">
 {% endblock %}

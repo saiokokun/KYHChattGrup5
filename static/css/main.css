@@ -1,13 +1,75 @@
 
- body {
-     background-color: lightgrey;
- }
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 
- .menu-item {
-     margin: 5px;
-     color: white;
-     text-decoration: none;
-     background-color: slategrey;
-     padding: 5px;
-     border-radius: 10px;
+
+body {
+    background-color: chocolate;
+    }
+
+    .menu-item {
+        margin: 5px;
+        color: crimson;
+        text-decoration: none;
+        background-color: black;
+        padding: 5px;
+        border-radius:  5px;
+    }
+
+table {
+    width: 75%;
+    background: antiquewhite;
+
+}
+
+th {
+    background: aquamarine;
+}
+
+tr:nth-child(odd){
+    background: darkgray;
+}
+tr:nth-child(even){
+    background: gray;
+    color: white;
+}
+
+.center-content{
+    display:flex;
+    allign-items: center;
+    alligh-content: center;
+}
+
+.circle{
+    margin: 0 auto;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+}
+
+.online{
+    background: lawngreen;
+}
+
+.offline{
+    background:crimson;
+}
+
+.sup{
+    position: relative;
+    bottom: 1ex;
+    font-size: 80%;
+    text-decoration: none;
+    color: black;
+}
+
+.new-msg {
+    color: green;
+}
+
+.no-new-msg{
+    color: rgba(54, 54, 54, 0.7);
+}
+
+#message-symbol{
+    font-size: 1em
 }

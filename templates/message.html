@@ -1,0 +1,133 @@
+{% extends "base-template.html" %}
+{% block title %}
+    Send a Message
+{% endblock %}
+{% block content %}
+    <h1>Sending a message to {{receiver.name}}</h1>
+    <form action="{{url_for('bp_user.message_post', user_id=user_id)}}" method="POST">
+
+    </form>
+
+
+
+ <div class="column is-4 is-offset-4">
+
+        <br/>
+        <button onclick="generateKey()">Generate AES Key</button>
+        <input id="key" placeholder="AES key (enter text or generate)" />
+
+
+     <input type="hidden" id="receiver_id" value="{{ receiver.id }}">
+
+{#        <p>Upload public key</p>#}
+{#        <input type="file" id="pub-file" enctype="multipart/form-data" />#}
+{#        <button onclick="readPublicKey()">Read Public Key</button><span id="pub-loaded"></span>#}
+
+        <button onclick="rsaEncrypt()">Encrypt AES-key</button>
+        <br/>
+        <br/>
+
+            <div class="field">
+                <label class="label">Title</label>
+                <div class="control">
+                    <input id="title" name="Title" class="input" type="text" placeholder="Message Title">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Message</label>
+                <div class="control">
+
+                    <input id="messagejson" name="content" class="input textarea"  type="text" placeholder="Message to Encrypt">
+                    <button onclick='encrypt()'>Encrypt</button>
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label">Encrypted AES key</label>
+                <div class="control">
+                <input id="encrypted_AES" name="encrypted_AES_key" class="input text" type="text" placeholder="">
+                </div>
+            </div>
+        <button onclick='fetcher()'>Send</button>
+{#        <form action="{{ url_for('bp_user.message_post', user_id=user_id, receiver_id=receiver_id, title=title) }}" method="POST" class="box">#}
+{#            #}
+{#        </form>#}
+    <input id="publicKey" type="hidden" value="{{ receiver.public_key }}">
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script src="../static/js/rsa.js"></script>
+    <script>
+
+        let key;
+        let encrypted;
+        let encrypted_rsa;
+        let AES_key;
+        let publicKey;
+        let key2;
+
+        /** random 128-bit number in canonical uuid format. all bits are random. */
+        function random128Hex() {
+            function random16Hex() { return (0x10000 | Math.random() * 0x10000).toString(16).substr(1); }
+            return random16Hex() + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() + random16Hex() + random16Hex();}
+
+        function generateKey() {
+            let salt = CryptoJS.lib.WordArray.random(12).toString();
+            key = CryptoJS.PBKDF2(salt, salt, { keySize: 128/32 });
+            key2 = CryptoJS.enc.Hex.parse(random128Hex());
+            console.log(key.toString);
+            document.getElementById("key").value = key;
+        }
+        function encrypt() {
+            let message = document.getElementById("messagejson").value;
+            encrypted = CryptoJS.AES.encrypt(message, key.toString(), {padding: CryptoJS.pad.Pkcs7});
+            console.log(encrypted);
+            console.log(encrypted.value);
+            document.getElementById("messagejson").value = encrypted.toString();
+        }
+
+        function rsaEncrypt() {
+            // Get the message to encrypt
+            let AES_key = document.getElementById("key").value;
+            // Create a RSA object
+            let rsaEncrypt = new JSEncrypt();
+            // Set the public key we want to use for encryption
+            publicKey = document.getElementById("publicKey").value;
+            {#console.log(publicKey);#}
+            rsaEncrypt.setPublicKey(publicKey);
+            // Show the encrypted message on the page
+            document.getElementById("encrypted_AES").value = rsaEncrypt.encrypt(AES_key);
+        }
+
+            function fetcher() {
+                return fetch('http://127.0.0.1:5000/message/', {
+                    method: 'POST',
+                    body: JSON.stringify(
+                        {"body": encrypted.toString(),
+                        "title": document.getElementById("title").value,
+                        "receiver_id": document.getElementById("receiver_id").value,
+                        "aes_key": document.getElementById("encrypted_AES").value
+
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8'
+                    }
+
+                }).then(function(response) {
+                        if (response.ok) {
+                            location.href='{{ url_for('bp_user.messages_get_sent') }}';
+                            return "OK";
+                        }
+
+                });
+            }
+
+    </script>
+
+{% endblock %}
