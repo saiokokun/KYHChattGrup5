@@ -1,9 +1,10 @@
 import self as self
-from flask import Blueprint, render_template, redirect, url_for, request
+import sqlalchemy
+from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import logout_user, login_required, current_user
 
 from controllers.message_controller import get_user_messages, get_MQTT_messages
-from controllers.user_controller import get_all_but_current_user, get_user_by_id
+from controllers.user_controller import get_all_but_current_user, get_user_by_id, post_user_public_key
 import json
 
 bp_user = Blueprint('bp_user', __name__)
@@ -39,16 +40,13 @@ def message_get(user_id):
     return render_template('message.html', receiver=receiver, user_id=user_id)
 
 
-
 @bp_user.post('/message/')
 def message_post():
     from app import db
     from models import Message
-
-    # jsonencrypted = request.json
     test = request.json
     rec_id = test["receiver_id"]
-    #print(rec_id)
+    # print(rec_id)
     message = Message(sender_id=current_user.id,
                       encrypted=test['body'],
                       title=test['title'],
@@ -91,5 +89,20 @@ def chat_post():
 def chat_get():
     messages = get_MQTT_messages()
     with open("MQTT/chatlog.txt", "r") as f:
-        chatmessages = f.read()
-    return render_template("chattbox.html", content=chatmessages)
+        chat_messages = f.read()
+    return render_template("chattbox.html", content=chat_messages)
+
+
+@bp_user.post('/user')
+def public_key_post():
+    from models import User
+    public_key = request.form["publicKey"]
+    print(public_key)
+    if public_key != len(public_key) >= 10:
+        flash("Key is sent")
+        post_user_public_key(public_key)
+        return redirect(url_for("bp_user.user_get"))
+
+    else:
+        flash("Your key seems a bit short... \n Try generating a new one")
+        return redirect(url_for("bp_user.user_get"))

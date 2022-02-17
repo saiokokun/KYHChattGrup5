@@ -29,5 +29,22 @@
         {% endfor %}
     </table>
 
+<p>Use this <a href="https://www.devglan.com/online-tools/rsa-encryption-decryption"> website</a> to generate a rsa key pair in 1024 bits </p>
+    <p>Remember to save your keys, because you'll need them later. If you somehow lost them you can generate a new pair and input the new public key</p>
+
+
+    <form action="{{ url_for('bp_user.public_key_post') }}" method="POST">
+        <label>
+            <input type="text" name="publicKey">
+        </label>
+        <input type="submit">
+    </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="notification">
+                   <a> {{ messages[0] }}.</a>
+                </div>
+            {% endif %}
+        {% endwith %}
 
 {% endblock %}

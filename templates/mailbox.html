@@ -74,9 +74,19 @@
                 // Set the private key we want to use for decryption
                 rsaEncrypt.setPrivateKey(privateKey);
                 // Decrypt the message
-                let plainText = rsaEncrypt.decrypt(cipher);
-                // Show the decryted message
-                document.getElementById("decrypted").innerHTML = plainText;
+                let decrypted_aes_key = rsaEncrypt.decrypt(aes_cipher);
+                let decrypted_message = CryptoJS.AES.decrypt(cipher, decrypted_aes_key).toString(CryptoJS.enc.Utf8);
+                console.log(decrypted_message)
+
+                // Show the decrypted message
+                document.getElementById("message").innerHTML = decrypted_message.value;
+                console.log(decrypted_message.toString());
+                console.log(decrypted_message.values);
+                console.log(decrypted_message.value);
+                document.getElementById("aes_key").innerHTML = decrypted_aes_key;
+
+
+                {#console.log(plainText);#}
             }
 
         </script>

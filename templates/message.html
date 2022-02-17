@@ -53,7 +53,7 @@
 {#        <form action="{{ url_for('bp_user.message_post', user_id=user_id, receiver_id=receiver_id, title=title) }}" method="POST" class="box">#}
 {#            #}
 {#        </form>#}
-
+    <input id="publicKey" type="hidden" value="{{ receiver.public_key }}">
 
     </div>
 
@@ -66,6 +66,16 @@
         let encrypted_rsa;
         let AES_key;
         let publicKey;
+        let key2;
+
+        /** random 128-bit number in canonical uuid format. all bits are random. */
+        function random128Hex() {
+            function random16Hex() { return (0x10000 | Math.random() * 0x10000).toString(16).substr(1); }
+            return random16Hex() + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() +
+            "-" + random16Hex() + random16Hex() + random16Hex();}
 
         function generateKey() {
             let salt = CryptoJS.lib.WordArray.random(12).toString();
@@ -88,6 +98,8 @@
             // Create a RSA object
             let rsaEncrypt = new JSEncrypt();
             // Set the public key we want to use for encryption
+            publicKey = document.getElementById("publicKey").value;
+            {#console.log(publicKey);#}
             rsaEncrypt.setPublicKey(publicKey);
             // Show the encrypted message on the page
             document.getElementById("encrypted_AES").value = rsaEncrypt.encrypt(AES_key);
