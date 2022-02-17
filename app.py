@@ -1,3 +1,4 @@
+
 import dotenv
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager
@@ -60,5 +61,4 @@ if __name__ == '__main__':
     dotenv.load_dotenv()
     app = create_app()
     app.run()
-
 

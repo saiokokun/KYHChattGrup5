@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
     <title>{% block title %}{% endblock %}</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
 
 </head>
 <body>
+
     <a class="menu-item" href="{{ url_for('bp_open.index') }}">
         Home
     </a>
@@ -43,7 +46,7 @@
     {% endblock %}
 
     <script>
-        setInterval(checkMessages, 5000000000000000000000000);
+        setInterval(checkMessages, 50000);
 
         function checkMessages() {
             fetch("http://127.0.0.1:5000/get_message_count")
@@ -64,6 +67,7 @@
             });
         }
     </script>
+
 
     {% block scripts %}
     {% endblock %}
