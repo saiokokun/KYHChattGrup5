@@ -52,42 +52,16 @@ def message_post():
     message = Message(sender_id=current_user.id,
                       encrypted=test['body'],
                       title=test['title'],
-                      receiver_id=test["receiver_id"])
+                      receiver_id=test["receiver_id"],
+                      aes_key=test["aes_key"])
 
-    # print(message)
     db.session.add(message)
+    user = get_user_by_id(rec_id)
+    user.recv_messages.append(message)
+    db.session.add(user)
     db.session.commit()
-
-    user_message(rec_id)
-
-    # senderinf = message_recv(user_id=test["receiver_id"], message)
-    # koda i databaser är reeeeeeeeeeeeeeeeeeeeeeeeeeeee
 
     return redirect(url_for('bp_user.messages_get_sent'))
-
-
-def user_message(rec_id):
-    from app import db
-    from models import message_recv
-    from models import Message
-    obj = db.session.query(Message).order_by(Message.id.desc()).first()
-    print(obj)
-    print(obj)
-    # msg = message_recv.insert().values([  # try this
-    #     {"user_id": int(rec_id)},
-    #     {"message_id": int(obj.id)}
-    # ])
-    # test1 = message_recv.insert().values(user_id=f"{int(rec_id)}")
-    # test2 = message_recv.insert().values(message_id=f"{int(obj.id)}")
-    # msg_recv = (
-    #     sqlalchemy.sql.expression.insert(message_recv).
-    #     values(user_id=receiver_id, message_id=obj.id)
-    # )
-    # print(msg_recv)
-    # print(msg_recv)
-    db.session.add(message_recv.insert().values(user_id=f"{int(rec_id)}"))
-    db.session.add(message_recv.insert().values(message_id=f"{int(obj.id)}"))
-    db.session.commit()
 
 
 @bp_user.get('/messages/sent')

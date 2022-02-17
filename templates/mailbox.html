@@ -23,14 +23,14 @@
             {% for message in messages %}
                 <tr>
                     <td>{{ message.sender.name }}</td>
-                    {% if message.timestamp is not none %}
-                        <td>{{ message.timestamp }}-</td>
+                    {% if message.sent_time is not none %}
+                        <td>{{ message.sent_time }}-</td>
                     {% else %}
                         <td>-</td>
                     {% endif %}
                     <td>{{ message.title }}</td>
-                    <td>{{ message.content }}</td>
-                    <td id="encrypted">{{ message.encrypted_AES_key }}</td>
+                    <td id="message"> {{ message.encrypted }}</td>
+                    <td id="aes_key"> {{ message.aes_key }}</td>
                 </tr>
             {% endfor %}
         </table>
@@ -67,7 +67,8 @@
 
             function rsaDecrypt() {
                 // Get the encrypted message
-                let cipher = document.getElementById("encrypted").innerHTML;
+                let cipher = document.getElementById("message").innerHTML;
+                let aes_cipher = document.getElementById("aes_key").innerHTML;
                 // Create a RSA object
                 let rsaEncrypt = new JSEncrypt();
                 // Set the private key we want to use for decryption
