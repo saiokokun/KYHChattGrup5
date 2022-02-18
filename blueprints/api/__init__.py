@@ -7,11 +7,6 @@ from controllers import user_controller
 bp_api = Blueprint('bp_api', __name__)
 
 
-# /users
-# /users/2
-# /users/2/messages
-# /users/2/messages/3
-
 def authorize(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
@@ -24,7 +19,6 @@ def authorize(f):
             }
             return Response(json.dumps(response), 401, content_type="application/json")
         return f(*args, **kwargs)
-
     return wrapper
 
 

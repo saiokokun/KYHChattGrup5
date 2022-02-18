@@ -12,7 +12,7 @@ OKBLUE = '\033[94m'
 sub_topic = "temp"
 
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(rc):
     if rc == 0:
         print('Connected to MQTT Broker')
     else:
@@ -36,13 +36,13 @@ def connect_mqtt():
     return client
 
 
-def on_subscribe(client, userdata, mid, granted_qos):
+def on_subscribe(mid, granted_qos):
     print('Subscribed')
     print('mid:', mid)
     print('qos:', granted_qos)
 
 
-def on_message(client, userdata, msg):
+def on_message(msg):
     payload = msg.payload.decode()
     print(f'Current temp in {msg.topic}: {payload}')
 

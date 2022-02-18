@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_user
-
 from models import User
 from passlib.hash import argon2
 
@@ -42,9 +41,6 @@ def login_post():
 @bp_open.get('/signup')
 def signup_get():
     return render_template('signup.html')
-
-
-
 
 
 @bp_open.post('/signup')

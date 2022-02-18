@@ -8,14 +8,14 @@ CLIENT_ID = f'kyh-mqtt-{random.randint(0, 1000)}'
 USERNAME = ''
 PASSWORD = ''
 BROKER = ''
-PORT =123
+PORT = 123
 USER = CLIENT_ID
 CRED = "\033[91m"
 OKBLUE = '\033[94m'
 sub_topic = "kyh/greg/"
 
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(rc):
     if rc == 0:
         print('Connected to MQTT Broker')
     else:
@@ -38,9 +38,8 @@ def connect_mqtt():
 
     return client
 
-
-
     # Publish to the topic temperature/room1 with temp
+
 
 def main():
     client = connect_mqtt()
@@ -51,7 +50,7 @@ def main():
     sub_topic = save_offline()
     new_message = 0
 
-    #time.sleep(10)
+    # time.sleep(10)
     while True:
         if new_message != 0:
             # Get current temperature
@@ -62,10 +61,6 @@ def main():
             time.sleep(1)
 
     client.loop_stop()
-
-
-
-
 
 
 if __name__ == '__main__':

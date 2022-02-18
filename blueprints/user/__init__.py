@@ -1,11 +1,7 @@
-import self as self
-import sqlalchemy
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import logout_user, login_required, current_user
-
 from controllers.message_controller import get_user_messages, get_MQTT_messages
 from controllers.user_controller import get_all_but_current_user, get_user_by_id, post_user_public_key
-import json
 
 bp_user = Blueprint('bp_user', __name__)
 
@@ -23,9 +19,6 @@ def logout_get():
     user.online = False
     if user.online:
         pass
-        # check messages.
-        # if message != 0
-        # load messages
 
     from app import db
     db.session.commit()
@@ -46,7 +39,6 @@ def message_post():
     from models import Message
     test = request.json
     rec_id = test["receiver_id"]
-    # print(rec_id)
     message = Message(sender_id=current_user.id,
                       encrypted=test['body'],
                       title=test['title'],
@@ -75,7 +67,6 @@ def mailbox_get():
 
 @bp_user.post("/chat")
 def chat_post():
-    # MQTT_Chatt.main()
     variabel_namn = request.form['body']
     lines = [variabel_namn]
     with open('MQTT/chatlog.txt', 'a') as f:
@@ -95,7 +86,6 @@ def chat_get():
 
 @bp_user.post('/user')
 def public_key_post():
-    from models import User
     public_key = request.form["publicKey"]
     print(public_key)
     if public_key != len(public_key) >= 10:

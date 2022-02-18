@@ -8,7 +8,6 @@
     <h1 id="main-heading">Mailbox</h1>
 
 
-
     <div class="column is-4 is-offset-4">
         <h1 class="title">Inbox</h1>
         <table>
@@ -48,6 +47,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
         <script src="../static/js/rsa.js"></script>
         <script>
+
             let publicKey;
             let privateKey;
 
@@ -61,7 +61,6 @@
                     privateKey = privateKey.replace(/(\r\n|\n|\r)/gm, "");
                     document.getElementById("priv-loaded").innerHTML = "Private key loaded";
                 };
-
                 reader.readAsText(file);
             }
 
@@ -86,7 +85,7 @@
                 document.getElementById("aes_key").innerHTML = decrypted_aes_key;
 
 
-                {#console.log(plainText);#}
+
             }
 
         </script>
